@@ -26,8 +26,8 @@ jobs:
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
       with:  
-        dotnet-version: 8.0
-    - name: Build KYC360.Platform.AdminPortal.Web
+        dotnet-version: 8.0.x
+    - name: Build Glass.Htmx
       working-directory: ./Glass.Htmx
       run: dotnet build Glass.Htmx.csproj -c Release
 

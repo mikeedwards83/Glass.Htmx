@@ -1,0 +1,32 @@
+# Glass NuGet Release
+name: NuGet Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master   
+      name: Use NuGet ${{ inputs.nuget-version }}
+    - uses: nuget/setup-nuget@v2
+      with:        
+        nuget-version: 5.x
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 8.0.x
+    - name: Publish Glass.Htmx - 8.0
+      working-directory: ./Glass.Htmx
+      run: dotnet build Glass.Htmx.csproj -c Release
+
+    - name: Generate Nuget package for project Glass.Htmx
+      working-directory: ./Glass.Htmx
+      run: dotnet pack --configuration Release --no-build --output ./nupkg -p:PackageVersion=${{ github.event.release.tag_name }}
+    - name: Push Nuget package for project Glass.Htmx    
+      working-directory: ./Glass.Htmx
+      run: dotnet nuget push ./nupkg/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+         
+         
