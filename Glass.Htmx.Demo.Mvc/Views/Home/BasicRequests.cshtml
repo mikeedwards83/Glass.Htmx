@@ -1,0 +1,17 @@
+﻿@using Glass.Htmx.Demo.Mvc.Views.Shared.Models
+@using Glass.Htmx
+@await Html.Shared().PageHeader(new PageHeaderView("Basic Requests", "Simple requests using Get, Post, Put"))
+
+
+
+
+<h2 class="text-4xl font-extrabold dark:text-white">Basic Request</h2>
+
+
+<div @Html.Htmx(x=>x.Get("/page/slow/basicrequestsresponse").Target("#basic-request-1").Indicator("#basic-request-1 .indicator"))>
+	<button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Default</button>
+</div>
+
+<div id="basic-request-1">
+   @await Html.Shared().Indicator()
+</div>
