@@ -32,33 +32,23 @@ namespace Glass.Htmx
         /// </summary>
         /// <param name="trigger"></param>
         /// <returns></returns>
-        public HtmxResponseBuilder WithTrigger(string trigger, Action<HtmxTriggerHeaderBuilder> builder = null)
+        public HtmxResponseBuilder WithTrigger(string trigger, Action<HtmxTriggerHeaderBuilder> builder = null, TriggerTiming timing = TriggerTiming.None)
         {
-            WriteTrigger(Headers.HxTrigger, trigger, builder);
-            return this;
-        }
 
-        /// <summary>
-        /// https://htmx.org/headers/hx-trigger/
-        /// </summary>
-        /// <param name="trigger"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        public HtmxResponseBuilder WithTriggerAfterSettle(string trigger, Action<HtmxTriggerHeaderBuilder> builder = null)
-        {
-            WriteTrigger(Headers.HxTriggerAfterSettle, trigger, builder);
-            return this;
-        }
-
-        /// <summary>
-        /// https://htmx.org/headers/hx-trigger/
-        /// </summary>
-        /// <param name="trigger"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        public HtmxResponseBuilder WithTriggerAfterSwap(string trigger, Action<HtmxTriggerHeaderBuilder> builder = null)
-        {
-            WriteTrigger(Headers.HxTriggerAfterSwap, trigger, builder);
+            switch (timing)
+            {
+                case TriggerTiming.None:
+                    WriteTrigger(Headers.HxTrigger, trigger, builder);
+                    break;
+                case TriggerTiming.AfterSwap:
+                    WriteTrigger(Headers.HxTriggerAfterSwap, trigger, builder);
+                    break;
+                case TriggerTiming.AfterSettle:
+                    WriteTrigger(Headers.HxTriggerAfterSettle, trigger, builder);
+                    break;
+                default:
+                    throw new NotSupportedException($"The value {timing} is not supported");
+            }
             return this;
         }
 
@@ -150,7 +140,7 @@ namespace Glass.Htmx
         /// <returns></returns>
         public HtmxResponseBuilder WithRetarget(string target)
         {
-            _response.Headers[Headers.HXRetarget] =target;
+            _response.Headers[Headers.HXRetarget] = target;
             return this;
         }
 
